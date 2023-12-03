@@ -1,5 +1,14 @@
 import '@/styles/globals.scss';
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+import { Inter } from 'next/font/google';
+
+const TitleBar = dynamic(() => import('@/components/TitleBar'), { ssr: false });
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Password Manager',
@@ -8,9 +17,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <body>
-        <div id="titleBarPortal"></div>
+        <div id="titleBar">
+          <TitleBar />
+        </div>
         <div id="root">
           <div id="routeRoot">{children}</div>
           <div id="modalPortal"></div>
