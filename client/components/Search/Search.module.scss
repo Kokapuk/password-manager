@@ -1,0 +1,17 @@
+@import '@/styles/vars';
+
+.container {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 35px;
+}
+
+.clearButton {
+  height: 100%;
+  font-size: 20px !important;
+  padding: 0 10px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  color: rgba(255, 255, 255, 0.3);
+  background-color: transparent !important;
+}

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import './vars';
+@import './screen.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+:root {
+  color-scheme: dark;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+  background-color: $bg-dark;
+}
+
+#root {
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+
+#routeRoot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  @include desktop {
+    padding: 25px 150px;
+  }
+
+  @include tabletAndMobile {
+    padding: 25px;
+  }
+}
+
+#spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+::selection {
+  background-color: rgba(23, 92, 220, 0.65);
+}

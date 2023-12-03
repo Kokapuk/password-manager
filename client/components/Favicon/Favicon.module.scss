@@ -1,0 +1,27 @@
+@import '@/styles/vars';
+@import '@/styles/skeleton';
+
+.container {
+  height: 100%;
+  aspect-ratio: 1/1;
+
+  @include transition(border-radius, background-color);
+
+  &.loading {
+    border-radius: 50%;
+    @include bone;
+  }
+}
+
+.image {
+  height: 100%;
+  width: 100%;
+  border-radius: $border-radius;
+
+  @include transition(opacity);
+
+  &.loading {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

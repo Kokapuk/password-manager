@@ -1,0 +1,22 @@
+@import '@/styles/vars';
+
+.spinner {
+  position: absolute;
+  top: auto;
+  left: auto;
+  height: 100%;
+  aspect-ratio: 1/1;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: 750ms spin linear infinite;
+}
+
+@keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}

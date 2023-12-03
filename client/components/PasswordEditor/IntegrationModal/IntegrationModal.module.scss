@@ -1,0 +1,14 @@
+@import '@/styles/screen';
+
+.modal {
+  @include desktopAndTablet {
+    width: 550px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 100%;
+}

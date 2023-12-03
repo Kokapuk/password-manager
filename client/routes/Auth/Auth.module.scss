@@ -1,0 +1,56 @@
+@import '@/styles/vars';
+@import '@/styles/screen';
+
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: $bg;
+  border-radius: $border-radius-large;
+  padding: 40px;
+
+  @include desktopAndTablet {
+    width: 400px;
+  }
+
+  @include mobile {
+    width: 100%;
+  }
+
+  .fullWidth {
+    margin: 0;
+    width: 100%;
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  color: $danger;
+  font-size: 14px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.button {
+  padding: 10px 15px !important;
+  width: fit-content;
+
+  &.alternateAuth {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}

@@ -1,0 +1,87 @@
+@import '@/styles/vars';
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  background-color: $accent;
+  border-radius: $border-radius;
+  position: relative;
+  cursor: pointer;
+  border: 0;
+  padding: 5px 7px;
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  @include transition(opacity, color);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &.loading {
+    color: transparent;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    @include transition(background-color);
+  }
+
+  &:hover::before {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:active::before {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .ripple {
+    position: absolute;
+    aspect-ratio: 1/1;
+    width: 200%;
+    max-width: 50vw;
+    translate: -50% -50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: grow 350ms linear forwards;
+
+    @keyframes grow {
+      0% {
+        opacity: 0;
+        scale: 0;
+      }
+      50% {
+        opacity: 1;
+        scale: 0.5;
+      }
+      100% {
+        opacity: 0;
+        scale: 1;
+      }
+    }
+  }
+}
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 70%;
+
+  div {
+    border-color: rgba(255, 255, 255, 0.75);
+    border-bottom-color: transparent;
+  }
+}

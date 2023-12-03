@@ -1,0 +1,86 @@
+@import '@/styles/vars';
+@import '@/styles/screen';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px 10px;
+  border-radius: $border-radius;
+  position: relative;
+  border: 1px dashed transparent;
+
+  @include transition(background-color);
+
+  &:hover,
+  &:focus-within {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  &.editing {
+    cursor: grab;
+  }
+
+  &.dragging * {
+    pointer-events: none;
+  }
+
+  &.dragOver {
+    border-color: white;
+  }
+}
+
+.title {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input {
+  font-size: 14px;
+  border: 0;
+  background-color: transparent;
+}
+
+.buttons {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+
+  @include transition(opacity);
+
+  @include tabletAndMobile {
+    pointer-events: none;
+  }
+
+  .container:hover &,
+  .container:focus-within & {
+    opacity: 1;
+
+    @include tabletAndMobile {
+      animation: enablePointerEvents $transition-duration forwards;
+    }
+  }
+
+  .button {
+    font-size: 17px !important;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: transparent !important;
+  }
+}
+
+@keyframes enablePointerEvents {
+  0% {
+    pointer-events: none;
+  }
+  99% {
+    pointer-events: none;
+  }
+  100% {
+    pointer-events: visible;
+  }
+}

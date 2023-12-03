@@ -1,0 +1,15 @@
+$bg-dark: #1f1e1f;
+$bg: #282828;
+$bg-light: #404040;
+$accent: #175ddc;
+$danger: #e84a5f;
+
+$border-radius: 5px;
+$border-radius-large: 10px;
+
+$transition-duration: 200ms;
+
+@mixin transition($transition-properties...) {
+  transition-duration: $transition-duration;
+  transition-property: $transition-properties;
+}

@@ -1,0 +1,135 @@
+@import '@/styles/vars';
+@import '@/styles/screen';
+
+.background {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  @include desktopAndTablet {
+    padding: 0 25px;
+  }
+
+  @include mobile {
+    align-items: flex-end;
+  }
+
+  &.enter {
+    opacity: 0;
+  }
+
+  &.enterActive {
+    opacity: 1;
+
+    @include transition(opacity);
+  }
+
+  &.exit {
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  &.exitActive {
+    opacity: 0;
+    pointer-events: none;
+
+    @include transition(opacity);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg;
+  padding: 25px;
+  $max-height: 0;
+
+  @include desktopAndTablet {
+    min-width: 500px;
+    border-radius: $border-radius-large;
+    $max-height: 80vh;
+
+    @include transition(scale);
+  }
+
+  @include mobile {
+    width: 100%;
+    border-radius: $border-radius-large $border-radius-large 0 0;
+    $max-height: 90vh;
+
+    @include transition(transform);
+  }
+
+  max-height: $max-height;
+
+  &.shown {
+    @include desktopAndTablet {
+      scale: 1;
+    }
+
+    @include mobile {
+      transform: translateY(0);
+    }
+  }
+
+  &.hidden {
+    @include desktopAndTablet {
+      scale: 0.95;
+    }
+
+    @include mobile {
+      transform: translateY(100px);
+    }
+  }
+
+  &.fullHeight {
+    height: $max-height;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+
+  .button {
+    background-color: transparent !important;
+    font-size: 24px !important;
+    color: rgba(255, 255, 255, 0.65);
+  }
+}
+
+.main {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding-right: 10px;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
+
+  .button {
+    padding: 8px 13px !important;
+
+    &.secondary {
+      background-color: rgba(255, 255, 255, 0.065) !important;
+    }
+  }
+}

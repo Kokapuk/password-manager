@@ -1,0 +1,104 @@
+@import '@/styles/vars';
+@import '@/styles/screen';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+$removeButtonSize: 25px;
+
+.passwordContainer {
+  position: relative;
+  margin-right: calc($removeButtonSize / 2);
+  border-radius: $border-radius-large;
+
+  @include transition(background-color);
+
+  @include desktop {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  @include tabletAndMobile {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.password {
+  &:hover::before,
+  &:active::before {
+    background-color: transparent !important;
+  }
+}
+
+.removeButtonContainer {
+  position: absolute !important;
+  top: 50%;
+  right: 0;
+  translate: 50% -50%;
+
+  &.enter {
+    opacity: 0;
+    scale: 0.95;
+  }
+
+  &.enterActive {
+    opacity: 1;
+    scale: 1;
+
+    @include transition(opacity, scale);
+  }
+
+  &.exit {
+    opacity: 1;
+    scale: 1;
+  }
+
+  &.exitActive {
+    opacity: 0;
+    scale: 0.95;
+
+    @include transition(opacity, scale);
+  }
+
+  .removeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $removeButtonSize;
+    width: $removeButtonSize;
+    padding: 2px;
+    border-radius: 50%;
+    background-color: $bg;
+    border: 1px solid $bg-light;
+    color: white;
+    cursor: pointer;
+
+    @include transition(opacity, background-color, border-color color);
+
+    @include desktop {
+      opacity: 0;
+
+      .passwordContainer:hover & {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      background-color: $danger;
+      border-color: $danger;
+    }
+
+    .icon {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
