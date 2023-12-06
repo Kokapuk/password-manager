@@ -1,5 +1,8 @@
+import Button from '@/components/Button';
+import Tooltip from '@/components/Tooltip';
 import useEditorStore from '@/store/editor';
 import generatePassword from '@/utils/generatePassword';
+import getDeviceType from '@/utils/getDeviceType';
 import simplifyUrl from '@/utils/simplifyUrl';
 import { Field as FieldType, Password } from '@/utils/types';
 import classNames from 'classnames';
@@ -13,8 +16,6 @@ import {
   HiMiniSquare2Stack,
   HiMiniTrash,
 } from 'react-icons/hi2';
-import Button from '../../Button';
-import Tooltip from '../../Tooltip';
 import styles from './Field.module.scss';
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
 const Field = ({ field, isWebsite }: Props) => {
   const { selectedPassword, isEditing, isDraggingField, setDraftPassword, setDraggingField } = useEditorStore();
   const [isDragOver, setDragOver] = useState(false);
+  const isDraggable = getDeviceType() === 'desktop' && isEditing && !isWebsite;
 
   const handleChange = (value: string) => {
     setDraftPassword((prev) => {
@@ -174,11 +176,11 @@ const Field = ({ field, isWebsite }: Props) => {
     <div
       className={classNames(
         styles.container,
-        isEditing && styles.editing,
+        isDraggable && styles.draggable,
         !!isDraggingField && styles.dragging,
         isDragOver && styles.dragOver
       )}
-      draggable={isEditing && !isWebsite}
+      draggable={isDraggable}
       onDragStart={handleDragStart}
       onDragEnd={!isWebsite ? () => setDraggingField(false) : undefined}
       onDragEnter={!isWebsite && isDraggingField ? () => setDragOver(true) : undefined}
@@ -190,7 +192,7 @@ const Field = ({ field, isWebsite }: Props) => {
       <input
         onBlur={handleBlur}
         onChange={(e) => (isWebsite ? handleWebsiteChange(e.currentTarget.value) : handleChange(e.currentTarget.value))}
-        draggable="true"
+        draggable={isDraggable}
         onDragStart={handleInputDragStart}
         readOnly={!isEditing}
         value={field.value}
