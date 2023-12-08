@@ -1,49 +1,38 @@
 import Field from '@/components/PasswordEditor/Field';
+import SortableList from '@/components/SortableList';
 import useEditorStore from '@/store/editor';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { Field as FieldType, Password } from '@/utils/types';
 import Integration from '../Integration';
 import styles from './Credentials.module.scss';
 
 const Credentials = () => {
-  const draftPassword = useEditorStore((state) => state.draftPassword);
+  const { isEditing, draftPassword, setDraftPassword } = useEditorStore();
 
   if (!draftPassword) {
     return null;
   }
 
+  const handleSort = (fields: FieldType[]) => {
+    setDraftPassword((prev) => {
+      const prevState: Password = JSON.parse(JSON.stringify(prev));
+      prevState.credentials.fields = fields;
+
+      return prevState;
+    });
+  };
+
   return (
     <div className={styles.container}>
-      <TransitionGroup className={styles.fieldList}>
-        {draftPassword.credentials.fields?.map((field) => (
-          <CSSTransition
-            key={field._id}
-            timeout={200}
-            classNames={{
-              enter: styles.fieldEnter,
-              enterActive: styles.fieldEnterActive,
-              exit: styles.fieldExit,
-              exitActive: styles.fieldExitActive,
-            }}
-          >
-            <>
-              <Field field={field} />
-            </>
-          </CSSTransition>
-        ))}
-      </TransitionGroup>
-      <CSSTransition
-        in={!!draftPassword.credentials.integration}
-        classNames={{
-          enter: styles.integrationEnter,
-          enterActive: styles.integrationEnterActive,
-          exit: styles.integrationExit,
-          exitActive: styles.integrationExitActive,
-        }}
-        timeout={200}
-        unmountOnExit
-      >
-        <Integration />
-      </CSSTransition>
+      {draftPassword.credentials.fields && (
+        <SortableList
+          sortable={isEditing}
+          data={draftPassword.credentials.fields}
+          getListItem={(item) => <Field field={item} />}
+          getItemKey={(item) => item._id}
+          onSort={handleSort}
+        />
+      )}
+      {!!draftPassword.credentials.integration && <Integration />}
       <Field isWebsite field={{ _id: '', title: 'Website', value: draftPassword.website, isPassword: false }} />
     </div>
   );

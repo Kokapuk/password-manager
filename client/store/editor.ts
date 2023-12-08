@@ -8,7 +8,6 @@ export interface EditorState {
   isEditing: boolean;
   isLoading: boolean;
   draftPassword?: Password;
-  isDraggingField: boolean;
   isDeleteModalOpen: boolean;
   isCreateFieldModalOpen: boolean;
   isIntegrationModalOpen: boolean;
@@ -17,7 +16,6 @@ export interface EditorState {
   setEditing(isEditing: boolean): void;
   setLoading(isLoading: boolean): void;
   setDraftPassword(draftPassword: Password | ((prev: Password | undefined) => Password | undefined)): void;
-  setDraggingField(isDraggingField: boolean): void;
   savePassword(): Promise<void>;
   setDeleteModalOpen(isDeleteModalOpen: boolean): void;
   setCreateFieldModalOpen(isCreateFieldModalOpen: boolean): void;
@@ -31,7 +29,6 @@ export const getDefaultEditorState = (): Omit<
   | 'setEditing'
   | 'setLoading'
   | 'setDraftPassword'
-  | 'setDraggingField'
   | 'savePassword'
   | 'setDeleteModalOpen'
   | 'setCreateFieldModalOpen'
@@ -41,7 +38,6 @@ export const getDefaultEditorState = (): Omit<
   selectedPassword: null,
   isEditing: false,
   isLoading: false,
-  isDraggingField: false,
   isDeleteModalOpen: false,
   isCreateFieldModalOpen: false,
   isIntegrationModalOpen: false,
@@ -72,9 +68,6 @@ const useEditorStore = create<EditorState>((set, get) => ({
         draftPassword,
       }));
     }
-  },
-  setDraggingField(isDraggingField) {
-    set({ isDraggingField });
   },
   async savePassword() {
     const draftPassword = get().draftPassword;

@@ -2,12 +2,9 @@ import Button from '@/components/Button';
 import Tooltip from '@/components/Tooltip';
 import useEditorStore from '@/store/editor';
 import generatePassword from '@/utils/generatePassword';
-import getDeviceType from '@/utils/getDeviceType';
 import simplifyUrl from '@/utils/simplifyUrl';
 import { Field as FieldType, Password } from '@/utils/types';
-import classNames from 'classnames';
 import Link from 'next/link';
-import { DragEvent, MouseEvent, useState } from 'react';
 import {
   HiMiniArrowPath,
   HiMiniArrowTopRightOnSquare,
@@ -24,9 +21,7 @@ interface Props {
 }
 
 const Field = ({ field, isWebsite }: Props) => {
-  const { selectedPassword, isEditing, isDraggingField, setDraftPassword, setDraggingField } = useEditorStore();
-  const [isDragOver, setDragOver] = useState(false);
-  const isDraggable = getDeviceType() === 'desktop' && isEditing && !isWebsite;
+  const { selectedPassword, isEditing, setDraftPassword } = useEditorStore();
 
   const handleChange = (value: string) => {
     setDraftPassword((prev) => {
@@ -104,96 +99,12 @@ const Field = ({ field, isWebsite }: Props) => {
     });
   };
 
-  const handleInputDragStart = (event: MouseEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
-    if (isWebsite) {
-      return;
-    }
-
-    event.dataTransfer.setData('field', JSON.stringify(field));
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.dropEffect = 'move';
-    setDraggingField(true);
-  };
-
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    if (isWebsite || !isDraggingField) {
-      return;
-    }
-
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    if (isWebsite || !isDraggingField) {
-      return;
-    }
-
-    setDraggingField(false);
-    setDragOver(false);
-
-    const serializedData = event.dataTransfer.getData('field');
-
-    if (!serializedData) {
-      return;
-    }
-
-    const droppedField: FieldType = JSON.parse(serializedData);
-
-    if (droppedField._id === field._id) {
-      return;
-    }
-
-    setDraftPassword((prev) => {
-      if (!prev) {
-        return prev;
-      }
-
-      const prevState: Password = JSON.parse(JSON.stringify(prev));
-
-      if (!prevState.credentials.fields) {
-        return prev;
-      }
-
-      const originalFieldIndex = prevState.credentials.fields.findIndex((item) => item._id === field._id);
-      const droppedFieldIndex = prevState.credentials.fields.findIndex((item) => item._id === droppedField._id);
-
-      [prevState.credentials.fields[originalFieldIndex], prevState.credentials.fields[droppedFieldIndex]] = [
-        prevState.credentials.fields[droppedFieldIndex],
-        prevState.credentials.fields[originalFieldIndex],
-      ];
-
-      return prevState;
-    });
-  };
-
   return (
-    <div
-      className={classNames(
-        styles.container,
-        isDraggable && styles.draggable,
-        !!isDraggingField && styles.dragging,
-        isDragOver && styles.dragOver
-      )}
-      draggable={isDraggable}
-      onDragStart={handleDragStart}
-      onDragEnd={!isWebsite ? () => setDraggingField(false) : undefined}
-      onDragEnter={!isWebsite && isDraggingField ? () => setDragOver(true) : undefined}
-      onDragOver={handleDragOver}
-      onDragLeave={!isWebsite && isDraggingField ? () => setDragOver(false) : undefined}
-      onDrop={handleDrop}
-    >
+    <div className={styles.container}>
       <p className={styles.title}>{field.title}</p>
       <input
         onBlur={handleBlur}
         onChange={(e) => (isWebsite ? handleWebsiteChange(e.currentTarget.value) : handleChange(e.currentTarget.value))}
-        draggable={isDraggable}
-        onDragStart={handleInputDragStart}
         readOnly={!isEditing}
         value={field.value}
         className={styles.input}
