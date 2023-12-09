@@ -3,32 +3,6 @@
 .container {
   display: flex;
   gap: 10px;
-
-  &.enter {
-    opacity: 0;
-    scale: .95;
-  }
-
-  &.enterActive {
-    opacity: 1;
-    scale: 1;
-
-    @include transition(opacity, scale);
-  }
-
-  &.exit {
-    opacity: 1;
-    scale: 1;
-    pointer-events: none;
-  }
-
-  &.exitActive {
-    opacity: 0;
-    scale: .95;
-    pointer-events: none;
-
-    @include transition(opacity, scale);
-  }
 }
 
 .button {

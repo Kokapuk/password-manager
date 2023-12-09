@@ -7,10 +7,7 @@ import Header from './Header';
 import styles from './PasswordEditor.module.scss';
 import Title from './Title';
 
-const CreateFieldModal = dynamic(() => import('./CreateFieldModal'), { ssr: false });
-const DeleteModal = dynamic(() => import('./DeleteModal'), { ssr: false });
 const ExposedPasswordModal = dynamic(() => import('./ExposedPasswordModal'), { ssr: false });
-const IntegrationModal = dynamic(() => import('./IntegrationModal'), { ssr: false });
 
 const PasswordEditor = () => {
   const form = useRef<HTMLFormElement>(null);
@@ -27,9 +24,6 @@ const PasswordEditor = () => {
         <Title />
         <Credentials />
       </form>
-      <CreateFieldModal />
-      <IntegrationModal />
-      <DeleteModal />
       <ExposedPasswordModal />
     </div>
   );

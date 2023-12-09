@@ -1,18 +1,19 @@
+import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import useEditorStore from '@/store/editor';
 import usePasswordsStore from '@/store/passwords';
 import { remove } from '@/utils/api';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { HiMiniTrash } from 'react-icons/hi2';
 
-const DeleteModal = () => {
-  const {
-    selectedPassword,
-    draftPassword,
-    isDeleteModalOpen,
-    setEditing,
-    setLoading,
-    setDeleteModalOpen,
-  } = useEditorStore();
+interface Props {
+  triggerClass: string;
+}
+
+const DeleteModal = ({ triggerClass }: Props) => {
+  const [isOpen, setOpen] = useState(false);
+  const { selectedPassword, draftPassword, isLoading, setEditing, setLoading } = useEditorStore();
   const { query, fetch: fetchPasswords } = usePasswordsStore();
   const router = useRouter();
 
@@ -21,7 +22,7 @@ const DeleteModal = () => {
   }
 
   const removePassword = async () => {
-    setDeleteModalOpen(false);
+    setOpen(false);
     setLoading(true);
 
     try {
@@ -35,19 +36,24 @@ const DeleteModal = () => {
   };
 
   return (
-    <Modal
-      onCloseRequest={() => setDeleteModalOpen(false)}
-      isOpen={isDeleteModalOpen}
-      title="Confirm action"
-      buttons={[
-        { title: 'Yes', onClick: removePassword, secondary: true },
-        { title: 'No', onClick: () => setDeleteModalOpen(false) },
-      ]}
-    >
-      <p>
-        Are you sure you want to delete <b>{selectedPassword.name}</b>?
-      </p>
-    </Modal>
+    <>
+      <Button loading={isLoading} onClick={() => setOpen(true)} className={triggerClass}>
+        <HiMiniTrash /> Delete
+      </Button>
+      <Modal
+        onCloseRequest={() => setOpen(false)}
+        isOpen={isOpen}
+        title="Confirm action"
+        buttons={[
+          { title: 'Yes', onClick: removePassword, secondary: true },
+          { title: 'No', onClick: () => setOpen(false) },
+        ]}
+      >
+        <p>
+          Are you sure you want to delete <b>{selectedPassword.name}</b>?
+        </p>
+      </Modal>
+    </>
   );
 };
 

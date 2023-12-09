@@ -8,8 +8,6 @@ export interface EditorState {
   isEditing: boolean;
   isLoading: boolean;
   draftPassword?: Password;
-  isDeleteModalOpen: boolean;
-  isCreateFieldModalOpen: boolean;
   isIntegrationModalOpen: boolean;
   isExposedPasswordModalOpen: boolean;
   setSelectedPassword(selectedPassword: Password | null): void;
@@ -17,8 +15,6 @@ export interface EditorState {
   setLoading(isLoading: boolean): void;
   setDraftPassword(draftPassword: Password | ((prev: Password | undefined) => Password | undefined)): void;
   savePassword(): Promise<void>;
-  setDeleteModalOpen(isDeleteModalOpen: boolean): void;
-  setCreateFieldModalOpen(isCreateFieldModalOpen: boolean): void;
   setIntegrationModalOpen(isIntegrationModalOpen: boolean): void;
   setExposedPasswordModalOpen(isExposedPasswordModalOpen: boolean): void;
 }
@@ -30,16 +26,12 @@ export const getDefaultEditorState = (): Omit<
   | 'setLoading'
   | 'setDraftPassword'
   | 'savePassword'
-  | 'setDeleteModalOpen'
-  | 'setCreateFieldModalOpen'
   | 'setIntegrationModalOpen'
   | 'setExposedPasswordModalOpen'
 > => ({
   selectedPassword: null,
   isEditing: false,
   isLoading: false,
-  isDeleteModalOpen: false,
-  isCreateFieldModalOpen: false,
   isIntegrationModalOpen: false,
   isExposedPasswordModalOpen: false,
 });
@@ -96,12 +88,6 @@ const useEditorStore = create<EditorState>((set, get) => ({
         set({ isLoading: false, isEditing: false, selectedPassword: fetchedPassword });
       } catch (e) {}
     }
-  },
-  setDeleteModalOpen(isDeleteModalOpen) {
-    set({ isDeleteModalOpen });
-  },
-  setCreateFieldModalOpen(isCreateFieldModalOpen) {
-    set({ isCreateFieldModalOpen });
   },
   setIntegrationModalOpen(isIntegrationModalOpen) {
     set({ isIntegrationModalOpen });

@@ -1,7 +1,9 @@
 import Favicon from '@/components/Favicon';
 import useEditorStore from '@/store/editor';
-import Buttons from './Buttons';
+import dynamic from 'next/dynamic';
 import styles from './Title.module.scss';
+
+const Buttons = dynamic(() => import('./Buttons'), { ssr: false });
 
 const Title = () => {
   const { isEditing, draftPassword, setDraftPassword } = useEditorStore();
@@ -23,7 +25,7 @@ const Title = () => {
         minLength={1}
         maxLength={64}
       />
-      <Buttons />
+      {isEditing && <Buttons />}
     </div>
   );
 };

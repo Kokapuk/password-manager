@@ -1,17 +1,19 @@
 import Button from '@/components/Button';
 import useEditorStore from '@/store/editor';
 import isExposedPasswordField from '@/utils/isExposedPasswordField';
-import { IconContext } from 'react-icons';
-import { HiMiniCheckCircle, HiMiniPencil, HiMiniTrash, HiMiniXMark } from 'react-icons/hi2';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import styles from './Header.module.scss';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { IconContext } from 'react-icons';
+import { HiMiniCheckCircle, HiMiniPencil, HiMiniXMark } from 'react-icons/hi2';
+import styles from './Header.module.scss';
+
+const DeleteModal = dynamic(() => import('../DeleteModal'), { ssr: false });
 
 interface Props {
   validate(): boolean;
 }
 
-const Header = ({validate}: Props) => {
+const Header = ({ validate }: Props) => {
   const {
     selectedPassword,
     isEditing,
@@ -20,7 +22,6 @@ const Header = ({validate}: Props) => {
     setEditing,
     setDraftPassword,
     savePassword,
-    setDeleteModalOpen,
     setExposedPasswordModalOpen,
   } = useEditorStore();
   const router = useRouter();
@@ -33,7 +34,7 @@ const Header = ({validate}: Props) => {
     if (!validate()) {
       return;
     }
-    
+
     const hasExposedPasswordField = draftPassword.credentials.fields?.some((item) => isExposedPasswordField(item));
 
     if (hasExposedPasswordField) {
@@ -50,46 +51,31 @@ const Header = ({validate}: Props) => {
 
   const handleClose = () => {
     router.push('/passwords');
-  }
+  };
 
   return (
     <IconContext.Provider value={{ className: styles.icon }}>
-      <SwitchTransition mode="out-in">
-        <CSSTransition
-          key={isEditing ? 'editing' : 'notEditing'}
-          classNames={{
-            enter: styles.enter,
-            enterActive: styles.enterActive,
-            exit: styles.exit,
-            exitActive: styles.exitActive,
-          }}
-          timeout={200}
-        >
-          <div className={styles.header}>
-            {isEditing ? (
-              <Button loading={isLoading} onClick={handleSavePassword} className={styles.button}>
-                <HiMiniCheckCircle /> Save
-              </Button>
-            ) : (
-              <Button loading={isLoading} onClick={() => setEditing(true)} className={styles.button}>
-                <HiMiniPencil /> Edit
-              </Button>
-            )}
-            <Button loading={isLoading} onClick={() => setDeleteModalOpen(true)} className={styles.button}>
-              <HiMiniTrash /> Delete
-            </Button>
-            {isEditing ? (
-              <Button onClick={handleCancel} className={styles.button}>
-                <HiMiniXMark /> Cancel
-              </Button>
-            ) : (
-              <Button onClick={handleClose} className={styles.button}>
-                <HiMiniXMark /> Close
-              </Button>
-            )}
-          </div>
-        </CSSTransition>
-      </SwitchTransition>
+      <div className={styles.header}>
+        {isEditing ? (
+          <Button key="save" loading={isLoading} onClick={handleSavePassword} className={styles.button}>
+            <HiMiniCheckCircle /> Save
+          </Button>
+        ) : (
+          <Button key="edit" loading={isLoading} onClick={() => setEditing(true)} className={styles.button}>
+            <HiMiniPencil /> Edit
+          </Button>
+        )}
+        <DeleteModal triggerClass={styles.button} />
+        {isEditing ? (
+          <Button key="cancel" onClick={handleCancel} className={styles.button}>
+            <HiMiniXMark /> Cancel
+          </Button>
+        ) : (
+          <Button key="close" onClick={handleClose} className={styles.button}>
+            <HiMiniXMark /> Close
+          </Button>
+        )}
+      </div>
     </IconContext.Provider>
   );
 };

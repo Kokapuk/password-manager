@@ -5,28 +5,6 @@
   justify-content: flex-end;
   gap: 10px;
   margin-bottom: 25px;
-
-  &.enter {
-    opacity: 0;
-  }
-
-  &.enterActive {
-    opacity: 1;
-
-    @include transition(opacity);
-  }
-
-  &.exit {
-    opacity: 1;
-    pointer-events: none;
-  }
-
-  &.exitActive {
-    opacity: 0;
-    pointer-events: none;
-
-    @include transition(opacity);
-  }
 }
 
 .button {

@@ -1,17 +1,29 @@
+import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import PasswordList from '@/components/PasswordList';
 import Search from '@/components/Search';
+import Tooltip from '@/components/Tooltip';
 import useAuthStore from '@/store/auth';
 import useEditorStore from '@/store/editor';
 import { limitPerPage } from '@/store/passwords';
 import { findAll } from '@/utils/api';
 import { Password } from '@/utils/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { HiMiniLink } from 'react-icons/hi2';
 import styles from './IntegrationModal.module.scss';
 
-const IntegrationModal = () => {
-  const { selectedPassword, draftPassword, isIntegrationModalOpen, setDraftPassword, setIntegrationModalOpen } =
-    useEditorStore();
+interface Props {
+  triggerClass: string;
+}
+
+const IntegrationModal = ({ triggerClass }: Props) => {
+  const {
+    selectedPassword,
+    draftPassword,
+    isIntegrationModalOpen: isOpen,
+    setDraftPassword,
+    setIntegrationModalOpen: setOpen,
+  } = useEditorStore();
   const [totalCount, setTotalCount] = useState<number | undefined>(undefined);
   const [passwords, setPasswords] = useState<Password[]>([]);
   const [isFetching, setFetching] = useState(true);
@@ -44,13 +56,13 @@ const IntegrationModal = () => {
   );
 
   useEffect(() => {
-    if (!isIntegrationModalOpen || passwords.length) {
+    if (!isOpen || passwords.length) {
       return;
     }
 
     fetchPasswords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchPasswords, isIntegrationModalOpen]);
+  }, [fetchPasswords, isOpen]);
 
   const paginatePasswords = useCallback(async () => {
     if (isFetchFailed || isFetching || !useAuthStore.getState().token || passwords.length >= (totalCount as number)) {
@@ -84,30 +96,37 @@ const IntegrationModal = () => {
       return prevState;
     });
 
-    setIntegrationModalOpen(false);
+    setOpen(false);
   };
 
   return (
-    <Modal
-      onCloseRequest={() => setIntegrationModalOpen(false)}
-      isOpen={isIntegrationModalOpen}
-      title="Select integration"
-      fullHeight
-      containerClass={styles.modal}
-    >
-      <div className={styles.container}>
-        <Search totalCount={totalCount ? totalCount - 1 : totalCount} noButtons onQueryUpdate={fetchPasswords} />
-        <PasswordList
-          selectedPasswordId={draftPassword?.credentials.integration?._id}
-          passwords={passwords.filter((item) => item._id !== selectedPassword._id)}
-          isFetching={isFetching}
-          isFetchFailed={isFetchFailed}
-          query={query}
-          onPasswordSelect={handleIntegrationSelect}
-          onPaginationTriggerReached={paginatePasswords}
-        />
-      </div>
-    </Modal>
+    <>
+      <Tooltip content="Select integration" placement="bottom">
+        <Button onClick={() => setOpen(true)} className={triggerClass} type="button">
+          <HiMiniLink />
+        </Button>
+      </Tooltip>
+      <Modal
+        onCloseRequest={() => setOpen(false)}
+        isOpen={isOpen}
+        title="Select integration"
+        fullHeight
+        containerClass={styles.modal}
+      >
+        <div className={styles.container}>
+          <Search totalCount={totalCount ? totalCount - 1 : totalCount} noButtons onQueryUpdate={fetchPasswords} />
+          <PasswordList
+            selectedPasswordId={draftPassword?.credentials.integration?._id}
+            passwords={passwords.filter((item) => item._id !== selectedPassword._id)}
+            isFetching={isFetching}
+            isFetchFailed={isFetchFailed}
+            query={query}
+            onPasswordSelect={handleIntegrationSelect}
+            onPaginationTriggerReached={paginatePasswords}
+          />
+        </div>
+      </Modal>
+    </>
   );
 };
 

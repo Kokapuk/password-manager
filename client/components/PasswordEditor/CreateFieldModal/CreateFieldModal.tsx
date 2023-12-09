@@ -1,22 +1,29 @@
+import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import TextInput from '@/components/TextInput';
+import Tooltip from '@/components/Tooltip';
 import useEditorStore from '@/store/editor';
 import { Field, Password } from '@/utils/types';
 import { Types } from 'mongoose';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { HiMiniLockClosed } from 'react-icons/hi2';
+import { HiMiniLockClosed, HiMiniPlus } from 'react-icons/hi2';
 
-const CreateFieldModal = () => {
-  const { isCreateFieldModalOpen, setDraftPassword, setCreateFieldModalOpen } = useEditorStore();
+interface Props {
+  triggerClass: string;
+}
+
+const CreateFieldModal = ({ triggerClass }: Props) => {
+  const [isOpen, setOpen] = useState(false);
+  const setDraftPassword = useEditorStore((state) => state.setDraftPassword);
   const newFieldInput = useRef<HTMLInputElement>(null);
   const [newFieldTitle, setNewFieldTitle] = useState('');
   const form = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (isCreateFieldModalOpen && newFieldInput.current) {
+    if (isOpen && newFieldInput.current) {
       newFieldInput.current.focus();
     }
-  }, [isCreateFieldModalOpen]);
+  }, [isOpen]);
 
   const createField = async () => {
     if (newFieldTitle.trim() === '') {
@@ -41,7 +48,7 @@ const CreateFieldModal = () => {
     });
 
     setNewFieldTitle('');
-    setCreateFieldModalOpen(false);
+    setOpen(false);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -50,31 +57,38 @@ const CreateFieldModal = () => {
   };
 
   return (
-    <Modal
-      onCloseRequest={() => setCreateFieldModalOpen(false)}
-      isOpen={isCreateFieldModalOpen}
-      title="Create new field"
-      buttons={[
-        {
-          title: 'Create',
-          onClick: () => (form.current?.checkValidity() ? createField() : form.current?.reportValidity()),
-        },
-      ]}
-    >
-      <form ref={form} onSubmit={handleSubmit}>
-        <TextInput
-          ref={newFieldInput}
-          onChange={(e) => setNewFieldTitle(e.target.value.trimStart())}
-          value={newFieldTitle}
-          icon={<HiMiniLockClosed />}
-          type="text"
-          placeholder="Title"
-          required
-          minLength={1}
-        />
-        <button style={{ display: 'none' }} type="submit" />
-      </form>
-    </Modal>
+    <>
+      <Tooltip content="Add field" placement="bottom">
+        <Button onClick={() => setOpen(true)} className={triggerClass} type="button">
+          <HiMiniPlus />
+        </Button>
+      </Tooltip>
+      <Modal
+        onCloseRequest={() => setOpen(false)}
+        isOpen={isOpen}
+        title="Create new field"
+        buttons={[
+          {
+            title: 'Create',
+            onClick: () => (form.current?.checkValidity() ? createField() : form.current?.reportValidity()),
+          },
+        ]}
+      >
+        <form ref={form} onSubmit={handleSubmit}>
+          <TextInput
+            ref={newFieldInput}
+            onChange={(e) => setNewFieldTitle(e.target.value.trimStart())}
+            value={newFieldTitle}
+            icon={<HiMiniLockClosed />}
+            type="text"
+            placeholder="Title"
+            required
+            minLength={1}
+          />
+          <button style={{ display: 'none' }} type="submit" />
+        </form>
+      </Modal>
+    </>
   );
 };
 
