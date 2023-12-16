@@ -16,15 +16,15 @@ const SortableList = <T,>({ data, sortable = true, getListItem, getItemKey, onSo
 
   useEffect(() => {
     const handleMouseUp = () => {
-      setDraggingIndex(null);  
+      setDraggingIndex(null);
       setDragOverIndex(null);
-    }
+    };
 
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => document.removeEventListener('mouseup', handleMouseUp);
-  }, [])
-  
+  }, []);
+
   const handleDragOver = (event: DragEvent<HTMLDivElement>, index: number) => {
     if (index === draggingIndex) {
       return;

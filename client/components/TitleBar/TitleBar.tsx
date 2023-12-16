@@ -1,5 +1,9 @@
 'use client';
 
+import ChromeClose from '@/icons/ChromeClose';
+import ChromeMaximize from '@/icons/ChromeMaximize';
+import ChromeMinimize from '@/icons/ChromeMinimize';
+import ChromeRestore from '@/icons/ChromeRestore';
 import isDesktopApp from '@/utils/isDesktopApp';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
@@ -13,6 +17,11 @@ const TitleBar = () => {
       return;
     }
 
+    (async () => {
+      const initialMaximized: boolean = await window.electron.ipcRenderer.invoke('getMaximized');
+      setMaximized(initialMaximized);
+    })();
+
     window.electron.ipcRenderer.on('toggleMaximized', (_event: unknown, isMaximized: boolean) => {
       setMaximized(isMaximized);
     });
@@ -25,16 +34,16 @@ const TitleBar = () => {
   return (
     <div className={styles.bar}>
       <button onClick={() => window.electron.ipcRenderer.send('minimize')} className={styles.controlButton}>
-        &#xE921;
+        <ChromeMinimize />
       </button>
       <button onClick={() => window.electron.ipcRenderer.send('toggleMaximized')} className={styles.controlButton}>
-        {isMaximized ? <>&#xE923;</> : <>&#xE922;</>}
+        {isMaximized ? <ChromeRestore /> : <ChromeMaximize />}
       </button>
       <button
         onClick={() => window.electron.ipcRenderer.send('close')}
         className={classNames(styles.controlButton, styles.close)}
       >
-        &#xE8BB;
+        <ChromeClose />
       </button>
     </div>
   );

@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { IconContext } from 'react-icons';
 import { HiMiniCheckCircle, HiMiniPencil, HiMiniXMark } from 'react-icons/hi2';
+import CancelModal from '../CancelModal';
 import styles from './Header.module.scss';
 
 const DeleteModal = dynamic(() => import('../DeleteModal'), { ssr: false });
@@ -20,7 +21,6 @@ const Header = ({ validate }: Props) => {
     isLoading,
     draftPassword,
     setEditing,
-    setDraftPassword,
     savePassword,
     setExposedPasswordModalOpen,
   } = useEditorStore();
@@ -44,11 +44,6 @@ const Header = ({ validate }: Props) => {
     savePassword();
   };
 
-  const handleCancel = () => {
-    setDraftPassword(JSON.parse(JSON.stringify(selectedPassword)));
-    setEditing(false);
-  };
-
   const handleClose = () => {
     router.push('/passwords');
   };
@@ -67,9 +62,7 @@ const Header = ({ validate }: Props) => {
         )}
         <DeleteModal triggerClass={styles.button} />
         {isEditing ? (
-          <Button key="cancel" onClick={handleCancel} className={styles.button}>
-            <HiMiniXMark /> Cancel
-          </Button>
+          <CancelModal triggerClass={styles.button} />
         ) : (
           <Button key="close" onClick={handleClose} className={styles.button}>
             <HiMiniXMark /> Close

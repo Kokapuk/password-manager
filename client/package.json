@@ -20,6 +20,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@electron-toolkit/preload": "^2.0.0",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
