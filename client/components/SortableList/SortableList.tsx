@@ -1,5 +1,14 @@
 import cn from 'classnames';
-import { DragEvent, ReactNode, useEffect, useState } from 'react';
+import {
+  DetailedHTMLProps,
+  DragEvent,
+  Fragment,
+  HTMLAttributes,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import styles from './SortableList.module.scss';
 
 interface Props<T> {
@@ -7,10 +16,18 @@ interface Props<T> {
   sortable?: boolean;
   getListItem(item: T): ReactNode;
   getItemKey(item: T): any;
+  getWrapper?(children: ReactElement<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>>, item: T): ReactNode;
   onSort(data: T[]): void;
 }
 
-const SortableList = <T,>({ data, sortable = true, getListItem, getItemKey, onSort }: Props<T>) => {
+const SortableList = <T,>({
+  data,
+  sortable = true,
+  getListItem,
+  getItemKey,
+  getWrapper = (c) => c,
+  onSort,
+}: Props<T>) => {
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
@@ -47,24 +64,28 @@ const SortableList = <T,>({ data, sortable = true, getListItem, getItemKey, onSo
   };
 
   return data.map((item, index) => (
-    <div
-      draggable={sortable}
-      key={getItemKey(item)}
-      onDragStart={() => setDraggingIndex(index)}
-      onDragOver={(e) => handleDragOver(e, index)}
-      onDragLeave={() => setDragOverIndex(null)}
-      onDragEnd={() => setDraggingIndex(null)}
-      onDrop={() => handleDrop(index)}
-      className={cn(
-        styles.itemContainer,
-        draggingIndex !== null && draggingIndex !== index && styles.slotAvailable,
-        draggingIndex !== null &&
-          dragOverIndex === index &&
-          (dragOverIndex < draggingIndex ? styles.slotAbove : styles.slotBelow)
+    <Fragment key={getItemKey(item)}>
+      {getWrapper(
+        <div
+          draggable={sortable}
+          onDragStart={() => setDraggingIndex(index)}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDragLeave={() => setDragOverIndex(null)}
+          onDragEnd={() => setDraggingIndex(null)}
+          onDrop={() => handleDrop(index)}
+          className={cn(
+            styles.itemContainer,
+            draggingIndex !== null && draggingIndex !== index && styles.slotAvailable,
+            draggingIndex !== null &&
+              dragOverIndex === index &&
+              (dragOverIndex < draggingIndex ? styles.slotAbove : styles.slotBelow)
+          )}
+        >
+          {getListItem(item)}
+        </div>,
+        item
       )}
-    >
-      {getListItem(item)}
-    </div>
+    </Fragment>
   ));
 };
 

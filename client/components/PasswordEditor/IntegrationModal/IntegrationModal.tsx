@@ -107,8 +107,8 @@ const IntegrationModal = ({ triggerClass }: Props) => {
         </Button>
       </Tooltip>
       <Modal
-        onCloseRequest={() => setOpen(false)}
-        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        open={isOpen}
         title="Select integration"
         fullHeight
         containerClass={styles.modal}
@@ -121,6 +121,7 @@ const IntegrationModal = ({ triggerClass }: Props) => {
             isFetching={isFetching}
             isFetchFailed={isFetchFailed}
             query={query}
+            totalCount={totalCount}
             onPasswordSelect={handleIntegrationSelect}
             onPaginationTriggerReached={paginatePasswords}
           />

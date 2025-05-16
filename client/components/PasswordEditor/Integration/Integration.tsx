@@ -1,16 +1,22 @@
-import PasswordSkeleton from '@/components/PasswordSkeleton';
+import Password from '@/components/Password';
 import useEditorStore from '@/store/editor';
 import { Password as PasswordType } from '@/utils/types';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'nextjs-toploader/app';
+import { Ref } from 'react';
 import { IconContext } from 'react-icons';
 import { HiMiniXMark } from 'react-icons/hi2';
 import styles from './Integration.module.scss';
 
 const Tooltip = dynamic(() => import('@/components/Tooltip'), { ssr: false });
-const Password = dynamic(() => import('@/components/Password'), { ssr: false, loading: () => <PasswordSkeleton /> });
 
-const Integration = () => {
-  const { isEditing, draftPassword, setSelectedPassword, setDraftPassword, setIntegrationModalOpen } = useEditorStore();
+interface Props {
+  ref?: Ref<HTMLDivElement>;
+}
+
+const Integration = ({ ref }: Props) => {
+  const { isEditing, draftPassword, setDraftPassword, setIntegrationModalOpen } = useEditorStore();
+  const router = useRouter();
 
   const handleRemoveClick = () => {
     setDraftPassword((prev) => {
@@ -27,7 +33,7 @@ const Integration = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div ref={ref} className={styles.container}>
       <h4>Integration</h4>
       <div className={styles.passwordContainer}>
         <Password
@@ -37,16 +43,18 @@ const Integration = () => {
           onClick={() =>
             isEditing
               ? setIntegrationModalOpen(true)
-              : setSelectedPassword(draftPassword.credentials.integration as PasswordType)
+              : router.push(`/passwords/${draftPassword.credentials.integration?._id}`)
           }
         />
-        <Tooltip containerClass={styles.removeButtonContainer} content="Remove integration" placement="left">
-          <button onClick={handleRemoveClick} className={styles.removeButton}>
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <HiMiniXMark />
-            </IconContext.Provider>
-          </button>
-        </Tooltip>
+        {isEditing && (
+          <Tooltip containerClass={styles.removeButtonContainer} content="Remove integration" placement="left">
+            <button onClick={handleRemoveClick} className={styles.removeButton}>
+              <IconContext.Provider value={{ className: styles.icon }}>
+                <HiMiniXMark />
+              </IconContext.Provider>
+            </button>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

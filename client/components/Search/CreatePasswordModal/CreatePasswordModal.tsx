@@ -65,8 +65,8 @@ const CreatePasswordModal = ({ triggerClass }: Props) => {
       </Tooltip>
       <Modal
         title="Create password"
-        isOpen={isOpen}
-        onCloseRequest={() => setOpen(false)}
+        open={isOpen}
+        onClose={() => setOpen(false)}
         buttons={[
           {
             title: 'Create',

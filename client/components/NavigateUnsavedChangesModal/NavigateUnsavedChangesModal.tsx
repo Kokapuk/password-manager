@@ -1,22 +1,22 @@
 import useEditorStore from '@/store/editor';
 import { Password } from '@/utils/types';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import Modal from '../Modal';
 
 interface Props {
   passwordToOpen?: Password;
-  isOpen: boolean;
-  onCloseRequest(): void;
+  open: boolean;
+  onClose(): void;
 }
 
-const UnsavedChangesModal = ({ passwordToOpen, ...props }: Props) => {
+const NavigateUnsavedChangesModal = ({ passwordToOpen, ...props }: Props) => {
   const { selectedPassword } = useEditorStore();
   const router = useRouter();
 
   const handleOpenPassword = () => {
     if (passwordToOpen) {
       router.push(`/passwords/${passwordToOpen._id}`);
-      props.onCloseRequest();
+      props.onClose();
     }
   };
 
@@ -25,7 +25,7 @@ const UnsavedChangesModal = ({ passwordToOpen, ...props }: Props) => {
       {...props}
       buttons={[
         { title: 'Yes', onClick: handleOpenPassword, secondary: true },
-        { title: 'No', onClick: props.onCloseRequest },
+        { title: 'No', onClick: props.onClose },
       ]}
       title="Hold on!"
     >
@@ -40,4 +40,4 @@ const UnsavedChangesModal = ({ passwordToOpen, ...props }: Props) => {
   );
 };
 
-export default UnsavedChangesModal;
+export default NavigateUnsavedChangesModal;

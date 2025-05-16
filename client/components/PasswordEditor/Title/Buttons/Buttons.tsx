@@ -1,12 +1,27 @@
-import dynamic from 'next/dynamic';
+import { Ref } from 'react';
+import CreateFieldModal from '../../CreateFieldModal';
+import IntegrationModal from '../../IntegrationModal';
 import styles from './Buttons.module.scss';
 
-const CreateFieldModal = dynamic(() => import('../../CreateFieldModal'), { ssr: false });
-const IntegrationModal = dynamic(() => import('../../IntegrationModal'), { ssr: false });
+interface Props {
+  ref?: Ref<HTMLDivElement>;
+}
 
-const Buttons = () => {
+const Buttons = ({ ref }: Props) => {
+  // const buttonsTag = useId();
+
+  // useEffect(() => {
+  //   startTransition([buttonsTag]);
+  // }, []);
+
+  // useLayoutEffect(() => {
+  //   return () => {
+  //     startTransition([buttonsTag]);
+  //   };
+  // }, []);
+
   return (
-    <div className={styles.container}>
+    <div ref={ref} className={styles.container}>
       <IntegrationModal triggerClass={styles.button} />
       <CreateFieldModal triggerClass={styles.button} />
     </div>

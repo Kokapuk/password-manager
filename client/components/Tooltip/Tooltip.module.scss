@@ -1,5 +1,5 @@
-@import '@/styles/vars';
-@import '@/styles/screen';
+@use '@/styles/vars' as *;
+@use '@/styles/screen' as *;
 
 $tooltipOffset: 9px;
 
@@ -18,44 +18,44 @@ $tooltipOffset: 9px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   pointer-events: none;
 
-  &.enter {
-    opacity: 0;
-  }
+  // &.enter {
+  //   opacity: 0;
+  // }
 
-  &.enterActive {
-    opacity: 1;
+  // &.enterActive {
+  //   opacity: 1;
 
-    @include transition(opacity, transform);
-  }
+  //   @include transition(opacity, transform);
+  // }
 
-  &.exit {
-    opacity: 1;
-  }
+  // &.exit {
+  //   opacity: 1;
+  // }
 
-  &.exitActive {
-    opacity: 0;
+  // &.exitActive {
+  //   opacity: 0;
 
-    @include transition(opacity, transform);
-  }
+  //   @include transition(opacity, transform);
+  // }
 
   &.top {
     transform: translateY(calc(0px - $tooltipOffset));
 
-    &.enter {
-      transform: translateY(calc(0px - $tooltipOffset / 2));
-    }
+    // &.enter {
+    //   transform: translateY(calc(0px - $tooltipOffset / 2));
+    // }
 
-    &.enterActive {
-      transform: translateY(calc(0px - $tooltipOffset));
-    }
+    // &.enterActive {
+    //   transform: translateY(calc(0px - $tooltipOffset));
+    // }
 
-    &.exit {
-      transform: translateY(calc(0px - $tooltipOffset));
-    }
+    // &.exit {
+    //   transform: translateY(calc(0px - $tooltipOffset));
+    // }
 
-    &.exitActive {
-      transform: translateY(calc(0px - $tooltipOffset / 2));
-    }
+    // &.exitActive {
+    //   transform: translateY(calc(0px - $tooltipOffset / 2));
+    // }
 
     &::before {
       bottom: 0;
@@ -68,21 +68,21 @@ $tooltipOffset: 9px;
   &.right {
     transform: translateX($tooltipOffset);
 
-    &.enter {
-      transform: translateX(calc($tooltipOffset / 2));
-    }
+    // &.enter {
+    //   transform: translateX(calc($tooltipOffset / 2));
+    // }
 
-    &.enterActive {
-      transform: translateX($tooltipOffset);
-    }
+    // &.enterActive {
+    //   transform: translateX($tooltipOffset);
+    // }
 
-    &.exit {
-      transform: translateX($tooltipOffset);
-    }
+    // &.exit {
+    //   transform: translateX($tooltipOffset);
+    // }
 
-    &.exitActive {
-      transform: translateX(calc($tooltipOffset / 2));
-    }
+    // &.exitActive {
+    //   transform: translateX(calc($tooltipOffset / 2));
+    // }
 
     &::before {
       left: 0;
@@ -95,21 +95,21 @@ $tooltipOffset: 9px;
   &.bottom {
     transform: translateY($tooltipOffset);
 
-    &.enter {
-      transform: translateY(calc($tooltipOffset / 2));
-    }
+    // &.enter {
+    //   transform: translateY(calc($tooltipOffset / 2));
+    // }
 
-    &.enterActive {
-      transform: translateY($tooltipOffset);
-    }
+    // &.enterActive {
+    //   transform: translateY($tooltipOffset);
+    // }
 
-    &.exit {
-      transform: translateY($tooltipOffset);
-    }
+    // &.exit {
+    //   transform: translateY($tooltipOffset);
+    // }
 
-    &.exitActive {
-      transform: translateY(calc($tooltipOffset / 2));
-    }
+    // &.exitActive {
+    //   transform: translateY(calc($tooltipOffset / 2));
+    // }
 
     &::before {
       top: 0;
@@ -122,21 +122,21 @@ $tooltipOffset: 9px;
   &.left {
     transform: translateX(calc(0px - $tooltipOffset));
 
-    &.enter {
-      transform: translateX(calc(0px - $tooltipOffset / 2));
-    }
+    // &.enter {
+    //   transform: translateX(calc(0px - $tooltipOffset / 2));
+    // }
 
-    &.enterActive {
-      transform: translateX(calc(0px - $tooltipOffset));
-    }
+    // &.enterActive {
+    //   transform: translateX(calc(0px - $tooltipOffset));
+    // }
 
-    &.exit {
-      transform: translateX(calc(0px - $tooltipOffset));
-    }
+    // &.exit {
+    //   transform: translateX(calc(0px - $tooltipOffset));
+    // }
 
-    &.exitActive {
-      transform: translateX(calc(0px - $tooltipOffset / 2));
-    }
+    // &.exitActive {
+    //   transform: translateX(calc(0px - $tooltipOffset / 2));
+    // }
 
     &::before {
       right: 0;

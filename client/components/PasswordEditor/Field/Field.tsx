@@ -5,6 +5,7 @@ import generatePassword from '@/utils/generatePassword';
 import simplifyUrl from '@/utils/simplifyUrl';
 import { Field as FieldType, Password } from '@/utils/types';
 import Link from 'next/link';
+import { Ref } from 'react';
 import {
   HiMiniArrowPath,
   HiMiniArrowTopRightOnSquare,
@@ -13,15 +14,19 @@ import {
   HiMiniSquare2Stack,
   HiMiniTrash,
 } from 'react-icons/hi2';
+import { defaults, startTransition } from 'react-smooth-flow';
 import styles from './Field.module.scss';
+import useToastsStore from '@/store/toasts';
 
 interface Props {
+  ref?: Ref<HTMLInputElement>;
   field: FieldType;
   isWebsite?: boolean;
 }
 
-const Field = ({ field, isWebsite }: Props) => {
+const Field = ({ ref, field, isWebsite }: Props) => {
   const { selectedPassword, isEditing, setDraftPassword } = useEditorStore();
+  const addToast = useToastsStore((st) => st.addToast);
 
   const handleChange = (value: string) => {
     setDraftPassword((prev) => {
@@ -86,21 +91,23 @@ const Field = ({ field, isWebsite }: Props) => {
   };
 
   const handleRemove = () => {
-    setDraftPassword((prev) => {
-      const prevState: Password = JSON.parse(JSON.stringify(prev));
+    startTransition([`field-${field._id}`], () =>
+      setDraftPassword((prev) => {
+        const prevState: Password = JSON.parse(JSON.stringify(prev));
 
-      if (!prevState.credentials.fields) {
-        return prev;
-      }
+        if (!prevState.credentials.fields) {
+          return prev;
+        }
 
-      prevState.credentials.fields = prevState.credentials.fields.filter((item) => item._id !== field._id);
+        prevState.credentials.fields = prevState.credentials.fields.filter((item) => item._id !== field._id);
 
-      return prevState;
-    });
+        return prevState;
+      })
+    );
   };
 
   return (
-    <div className={styles.container}>
+    <div ref={ref} className={styles.container}>
       <p className={styles.title}>{field.title}</p>
       <input
         onBlur={handleBlur}
@@ -146,7 +153,14 @@ const Field = ({ field, isWebsite }: Props) => {
           </Tooltip>
         )}
         <Tooltip content="Copy" placement="top">
-          <Button onClick={() => navigator.clipboard.writeText(field.value)} className={styles.button} type="button">
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(field.value);
+              addToast({ type: 'info', content: `Copied <b>${field.title}<b>` }, 2500);
+            }}
+            className={styles.button}
+            type="button"
+          >
             <HiMiniSquare2Stack />
           </Button>
         </Tooltip>

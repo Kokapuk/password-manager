@@ -7,6 +7,7 @@ import { Field, Password } from '@/utils/types';
 import { Types } from 'mongoose';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { HiMiniLockClosed, HiMiniPlus } from 'react-icons/hi2';
+import { startTransition } from 'react-smooth-flow';
 
 interface Props {
   triggerClass: string;
@@ -30,22 +31,26 @@ const CreateFieldModal = ({ triggerClass }: Props) => {
       return;
     }
 
-    setDraftPassword((prev) => {
-      const prevState: Password = JSON.parse(JSON.stringify(prev));
+    const fieldId = new Types.ObjectId().toString();
 
-      if (!prevState.credentials.fields) {
-        prevState.credentials.fields = [];
-      }
+    startTransition([`field-${fieldId}`], () =>
+      setDraftPassword((prev) => {
+        const prevState: Password = JSON.parse(JSON.stringify(prev));
 
-      const field: Field = {
-        _id: new Types.ObjectId().toString(),
-        title: newFieldTitle,
-        isPassword: newFieldTitle.toLocaleLowerCase().includes('password'),
-        value: '',
-      };
-      prevState.credentials.fields.push(field);
-      return prevState;
-    });
+        if (!prevState.credentials.fields) {
+          prevState.credentials.fields = [];
+        }
+
+        const field: Field = {
+          _id: fieldId,
+          title: newFieldTitle,
+          isPassword: newFieldTitle.toLocaleLowerCase().includes('password'),
+          value: '',
+        };
+        prevState.credentials.fields.push(field);
+        return prevState;
+      })
+    );
 
     setNewFieldTitle('');
     setOpen(false);
@@ -64,8 +69,8 @@ const CreateFieldModal = ({ triggerClass }: Props) => {
         </Button>
       </Tooltip>
       <Modal
-        onCloseRequest={() => setOpen(false)}
-        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        open={isOpen}
         title="Create new field"
         buttons={[
           {

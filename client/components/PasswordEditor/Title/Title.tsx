@@ -1,12 +1,22 @@
 import Favicon from '@/components/Favicon';
 import useEditorStore from '@/store/editor';
-import dynamic from 'next/dynamic';
+import { useId } from 'react';
+import { Binder, startTransition, usePreCommitEffect } from 'react-smooth-flow';
+import Buttons from './Buttons';
 import styles from './Title.module.scss';
-
-const Buttons = dynamic(() => import('./Buttons'), { ssr: false });
 
 const Title = () => {
   const { isEditing, draftPassword, setDraftPassword } = useEditorStore();
+  const buttonsTag = useId();
+
+  usePreCommitEffect(
+    (isInitialRendering) => {
+      if (!isInitialRendering) {
+        startTransition([buttonsTag]);
+      }
+    },
+    [isEditing]
+  );
 
   if (!draftPassword) {
     return null;
@@ -25,7 +35,20 @@ const Title = () => {
         minLength={1}
         maxLength={64}
       />
-      {isEditing && <Buttons />}
+      {isEditing && (
+        <Binder
+          transitions={{
+            [buttonsTag]: {
+              duration: 250,
+              enterKeyframes: { transform: ['translateX(25px)', 'translateX(0)'], opacity: [0, 1] },
+              exitKeyframes: 'reversedEnter',
+              transitionLayout: true,
+            },
+          }}
+        >
+          <Buttons />
+        </Binder>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
-@import './vars';
-@import './screen.scss';
+@use './vars' as *;
+@use './screen.scss' as *;
 
 * {
   padding: 0;

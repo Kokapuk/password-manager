@@ -5,7 +5,7 @@ import TextInput from '@/components/TextInput';
 import { auth } from '@/utils/api';
 import cn from 'classnames';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiMiniLockClosed, HiMiniUser } from 'react-icons/hi2';
 import styles from './Auth.module.scss';
 
@@ -16,9 +16,19 @@ const SignIn = () => {
     password: '',
   });
   const [isLoading, setLoading] = useState(false);
+  const loginInput = useRef<HTMLInputElement>(null);
+  const passwordInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setCredentials((prev) => ({ ...prev, login: localStorage.getItem('login') ?? '' }));
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('login')) {
+      passwordInput.current?.focus();
+    } else {
+      loginInput.current?.focus();
+    }
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -43,7 +53,7 @@ const SignIn = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <h2 className={styles.title}>Sign In</h2>
         <TextInput
-          autoFocus={!localStorage.getItem('login')}
+          ref={loginInput}
           value={credentials.login}
           onChange={(e) => setCredentials((prev) => ({ ...prev, login: e.target.value.trimStart() }))}
           required
@@ -53,7 +63,7 @@ const SignIn = () => {
           icon={<HiMiniUser />}
         />
         <TextInput
-          autoFocus={!!localStorage.getItem('login')}
+          ref={passwordInput}
           value={credentials.password}
           onChange={(e) => setCredentials((prev) => ({ ...prev, password: e.target.value }))}
           required

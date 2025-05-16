@@ -1,5 +1,5 @@
-@import '@/styles/vars';
-@import '@/styles/screen';
+@use '@/styles/vars' as *;
+@use '@/styles/screen' as *;
 
 .background {
   z-index: 100;
@@ -51,12 +51,15 @@
   flex-direction: column;
   background-color: $bg;
   padding: 25px;
-  $max-height: 0;
 
   @include desktopAndTablet {
     min-width: 500px;
     border-radius: $border-radius-large;
-    $max-height: 80vh;
+    max-height: 80vh;
+
+    &.fullHeight {
+      height: 80vh;
+    }
 
     @include transition(scale);
   }
@@ -64,35 +67,13 @@
   @include mobile {
     width: 100%;
     border-radius: $border-radius-large $border-radius-large 0 0;
-    $max-height: 90vh;
+    max-height: 90vh;
+
+    &.fullHeight {
+      height: 80vh;
+    }
 
     @include transition(transform);
-  }
-
-  max-height: $max-height;
-
-  &.shown {
-    @include desktopAndTablet {
-      scale: 1;
-    }
-
-    @include mobile {
-      transform: translateY(0);
-    }
-  }
-
-  &.hidden {
-    @include desktopAndTablet {
-      scale: 0.95;
-    }
-
-    @include mobile {
-      transform: translateY(100px);
-    }
-  }
-
-  &.fullHeight {
-    height: $max-height;
   }
 }
 

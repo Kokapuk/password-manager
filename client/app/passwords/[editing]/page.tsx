@@ -5,13 +5,14 @@ import useAuthStore from '@/store/auth';
 import useEditorStore from '@/store/editor';
 import usePasswordsStore from '@/store/passwords';
 import { findOne } from '@/utils/api';
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 
 interface Props {
-  params: { editing: string };
+  params: Promise<{ editing: string }>;
 }
 
-function EditingPage({ params }: Props) {
+const EditingPage = (props: Props) => {
+  const params = use(props.params);
   const passwords = usePasswordsStore((state) => state.passwords);
   const { selectedPassword, setSelectedPassword } = useEditorStore();
   const token = useAuthStore((state) => state.token);
@@ -39,6 +40,6 @@ function EditingPage({ params }: Props) {
   }, [params.editing, token]);
 
   return <PasswordEditor key={selectedPassword?._id} />;
-}
+};
 
 export default EditingPage;

@@ -1,14 +1,15 @@
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import useEditorStore from '@/store/editor';
-import { useState } from 'react';
+import { Ref, useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 
 interface Props {
+  ref?: Ref<HTMLButtonElement>;
   triggerClass: string;
 }
 
-const CancelModal = ({ triggerClass }: Props) => {
+const CancelModal = ({ ref, triggerClass }: Props) => {
   const [isOpen, setOpen] = useState(false);
   const { selectedPassword, draftPassword, setEditing, setDraftPassword } = useEditorStore();
 
@@ -23,12 +24,12 @@ const CancelModal = ({ triggerClass }: Props) => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className={triggerClass}>
+      <Button ref={ref} onClick={() => setOpen(true)} className={triggerClass}>
         <HiMiniXMark /> Cancel
       </Button>
       <Modal
-        isOpen={isOpen}
-        onCloseRequest={() => setOpen(false)}
+        open={isOpen}
+        onClose={() => setOpen(false)}
         title="Confirm action"
         buttons={[
           { title: 'Yes', onClick: handleCancel, secondary: true },

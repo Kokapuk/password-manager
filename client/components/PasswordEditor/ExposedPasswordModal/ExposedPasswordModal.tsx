@@ -37,8 +37,8 @@ const ExposedPasswordModal = () => {
 
   return (
     <Modal
-      isOpen={isExposedPasswordModalOpen}
-      onCloseRequest={() => setExposedPasswordModalOpen(false)}
+      open={isExposedPasswordModalOpen}
+      onClose={() => setExposedPasswordModalOpen(false)}
       title="Hold on!"
       buttons={[
         { title: 'Cancel', onClick: () => setExposedPasswordModalOpen(false), secondary: true },

@@ -1,7 +1,7 @@
 import cn from 'classnames';
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
+import { Binder, startTransition, usePreCommitEffect } from 'react-smooth-flow';
 import styles from './Tooltip.module.scss';
 
 interface Props {
@@ -23,6 +23,15 @@ const Tooltip = ({ content, children, placement, containerClass }: Props) => {
   const tooltip = useRef<HTMLSpanElement>(null);
   const [position, setPosition] = useState<Position>({});
   const [isVisible, setVisible] = useState(false);
+  const tooltipTag = useId();
+  const startTransformProperty = (
+    {
+      top: 'translateY(5px)',
+      right: 'translateX(-5px)',
+      bottom: 'translateY(-5px)',
+      left: 'translateX(5px)',
+    } as Record<Props['placement'], string>
+  )[placement];
 
   const updateLocation = useCallback(
     (container: HTMLDivElement) => {
@@ -84,6 +93,15 @@ const Tooltip = ({ content, children, placement, containerClass }: Props) => {
     return () => window.removeEventListener('scroll', handleScroll, true);
   }, [updateLocation]);
 
+  usePreCommitEffect(
+    (isInitialRender) => {
+      if (!isInitialRender) {
+        startTransition([tooltipTag]);
+      }
+    },
+    [isVisible]
+  );
+
   return (
     <div
       ref={container}
@@ -92,28 +110,28 @@ const Tooltip = ({ content, children, placement, containerClass }: Props) => {
       onMouseLeave={() => setVisible(false)}
     >
       {children}
-      {createPortal(
-        <CSSTransition
-          in={isVisible}
-          classNames={{
-            enter: styles.enter,
-            enterActive: styles.enterActive,
-            exit: styles.exit,
-            exitActive: styles.exitActive,
-          }}
-          timeout={200}
-          unmountOnExit
-        >
-          <span
-            ref={tooltip}
-            style={{ ...position }}
-            className={cn(styles.tooltip, styles[placement], isVisible && styles.visible)}
+      {isVisible &&
+        createPortal(
+          <Binder
+            transitions={{
+              [tooltipTag]: {
+                duration: 250,
+                enterKeyframes: { transform: [startTransformProperty, 'translate(0)'], opacity: [0, 1] },
+                exitKeyframes: 'reversedEnter',
+                clip: false,
+              },
+            }}
           >
-            <p className={styles.content}>{content}</p>
-          </span>
-        </CSSTransition>,
-        document.getElementById('tooltipPortal') as HTMLElement
-      )}
+            <span
+              ref={tooltip}
+              style={{ ...position }}
+              className={cn(styles.tooltip, styles[placement], isVisible && styles.visible)}
+            >
+              <p className={styles.content}>{content}</p>
+            </span>
+          </Binder>,
+          document.getElementById('tooltipPortal') as HTMLElement
+        )}
     </div>
   );
 };

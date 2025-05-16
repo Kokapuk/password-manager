@@ -1,10 +1,10 @@
-@import '@/styles/vars';
+@use '@/styles/vars' as *;
 
 .bar {
   -webkit-app-region: drag;
   display: flex;
   justify-content: flex-end;
-  height: 32px;
+  height: env(titlebar-area-height);
 }
 
 .controlButton {

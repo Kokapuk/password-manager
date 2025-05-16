@@ -1,5 +1,5 @@
-@import '@/styles/vars';
-@import '@/styles/screen';
+@use '@/styles/vars' as *;
+@use '@/styles/screen' as *;
 
 .container {
   height: 100%;

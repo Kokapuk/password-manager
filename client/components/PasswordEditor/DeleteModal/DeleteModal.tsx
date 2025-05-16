@@ -4,14 +4,15 @@ import useEditorStore from '@/store/editor';
 import usePasswordsStore from '@/store/passwords';
 import { remove } from '@/utils/api';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Ref, useState } from 'react';
 import { HiMiniTrash } from 'react-icons/hi2';
 
 interface Props {
+  ref?: Ref<HTMLButtonElement>;
   triggerClass: string;
 }
 
-const DeleteModal = ({ triggerClass }: Props) => {
+const DeleteModal = ({ ref, triggerClass }: Props) => {
   const [isOpen, setOpen] = useState(false);
   const { selectedPassword, draftPassword, isLoading, setEditing, setLoading } = useEditorStore();
   const { query, fetch: fetchPasswords } = usePasswordsStore();
@@ -37,12 +38,12 @@ const DeleteModal = ({ triggerClass }: Props) => {
 
   return (
     <>
-      <Button loading={isLoading} onClick={() => setOpen(true)} className={triggerClass}>
+      <Button ref={ref} disabled={isLoading} onClick={() => setOpen(true)} className={triggerClass}>
         <HiMiniTrash /> Delete
       </Button>
       <Modal
-        onCloseRequest={() => setOpen(false)}
-        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        open={isOpen}
         title="Confirm action"
         buttons={[
           { title: 'Yes', onClick: removePassword, secondary: true },

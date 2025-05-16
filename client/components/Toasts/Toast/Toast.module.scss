@@ -1,0 +1,39 @@
+@use 'styles/vars' as *;
+
+.toast {
+  padding: 12px 16px 12px 28px;
+  background-color: $bg;
+  border-radius: $border-radius;
+  color: white;
+  font-size: 14px;
+  line-height: 20px;
+  max-width: 280px;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: 4px;
+    border-radius: 2px;
+  }
+
+  &.success::before {
+    background-color: $success;
+  }
+
+  &.failure::before {
+    background-color: $danger;
+  }
+
+  &.warning::before {
+    background-color: $warning;
+  }
+
+  &.info::before {
+    background-color: $accent;
+  }
+}

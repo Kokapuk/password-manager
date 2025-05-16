@@ -1,21 +1,21 @@
 'use client';
 
+import SignIn from '@/routes/Auth';
 import useAuthStore from '@/store/auth';
-import dynamic from 'next/dynamic';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-
-const SignIn = dynamic(() => import('@/routes/Auth/SignIn'), { ssr: false });
 
 const SignInPage = () => {
   const token = useAuthStore((state) => state.token);
+  const router = useRouter();
 
   useEffect(() => {
     useAuthStore.persist.rehydrate();
 
     if (useAuthStore.getState().token) {
-      redirect('/passwords');
+      router.push('/passwords');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return <SignIn />;

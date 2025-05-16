@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import PasswordSkeleton from '../PasswordSkeleton';
 import styles from './PasswordList.module.scss';
-import { useParams } from 'next/navigation';
 
 const Password = dynamic(() => import('../Password'), { ssr: false, loading: () => <PasswordSkeleton /> });
 
@@ -15,6 +14,7 @@ interface Props {
   isFetchFailed: boolean;
   query: string;
   selectedPasswordId?: string;
+  totalCount?: number;
   onPasswordSelect?(password: PasswordType): void;
   onPaginationTriggerReached(): void;
 }
@@ -25,6 +25,7 @@ const PasswordList = ({
   isFetchFailed,
   query,
   selectedPasswordId,
+  totalCount,
   onPasswordSelect,
   onPaginationTriggerReached,
 }: Props) => {
@@ -77,7 +78,14 @@ const PasswordList = ({
         />
       ))}
       {!isFetching && <div ref={paginationTrigger} data-pagination-trigger style={{ height: 1, flexShrink: 0 }} />}
-      {isFetching && new Array(limitPerPage).fill(0).map((_item, index) => <PasswordSkeleton key={index} />)}
+      {isFetching &&
+        new Array(
+          totalCount !== undefined && totalCount - passwords.length <= limitPerPage
+            ? totalCount - passwords.length
+            : limitPerPage
+        )
+          .fill(0)
+          .map((_item, index) => <PasswordSkeleton key={index} />)}
       {!isFetching && passwords.length === 0 && (
         <p className={styles.emptyPlaceholder}>
           {isFetchFailed

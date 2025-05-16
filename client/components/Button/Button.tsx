@@ -1,7 +1,7 @@
 'use client';
 
 import cn from 'classnames';
-import { MouseEvent, ReactNode, useRef, useState } from 'react';
+import { MouseEvent, ReactNode, Ref, useRef, useState } from 'react';
 import { Ripple } from '.';
 import LoadingSpinner from '../LoadingSpinner';
 import styles from './Button.module.scss';
@@ -9,6 +9,7 @@ import styles from './Button.module.scss';
 export interface ButtonProps {
   loading?: boolean;
   children?: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const Button = ({
