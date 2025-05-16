@@ -25,10 +25,6 @@ const CloseUnsavedChangesModal = () => {
     return () => window.electron.ipcRenderer.removeAllListeners('requestClose');
   }, [isEditing]);
 
-  if (!isDesktopApp()) {
-    return null;
-  }
-
   return (
     <Modal
       open={open}
