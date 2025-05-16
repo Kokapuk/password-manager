@@ -1,11 +1,11 @@
-import { type Toast } from '@/store/toasts';
+import { Toast as IToast } from '@/store/toasts';
 import cn from 'classnames';
 import { Ref } from 'react';
 import styles from './Toast.module.scss';
 
 interface Props {
   ref?: Ref<HTMLDivElement>;
-  toast: Toast;
+  toast: IToast;
 }
 
 const Toast = ({ ref, toast }: Props) => {
