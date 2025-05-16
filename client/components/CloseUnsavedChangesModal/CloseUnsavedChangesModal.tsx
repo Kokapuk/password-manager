@@ -1,6 +1,7 @@
 'use client';
 
 import useEditorStore from '@/store/editor';
+import isDesktopApp from '@/utils/isDesktopApp';
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
 
@@ -9,6 +10,10 @@ const CloseUnsavedChangesModal = () => {
   const { isEditing, selectedPassword } = useEditorStore();
 
   useEffect(() => {
+    if (!isDesktopApp()) {
+      return;
+    }
+
     window.electron.ipcRenderer.on('requestClose', () => {
       if (isEditing) {
         setOpen(true);
@@ -19,6 +24,10 @@ const CloseUnsavedChangesModal = () => {
 
     return () => window.electron.ipcRenderer.removeAllListeners('requestClose');
   }, [isEditing]);
+
+  if (!isDesktopApp()) {
+    return null;
+  }
 
   return (
     <Modal
