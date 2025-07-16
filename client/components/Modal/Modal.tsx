@@ -70,7 +70,7 @@ const Modal = ({ open, title, children, buttons, fullHeight, containerClass, onC
               duration: 300,
               enterKeyframes: { transform: ['scale(0.9)', 'scale(1)'], opacity: [0, 1] },
               exitKeyframes: 'reversedEnter',
-              captureDynamicStates: true,
+              captureDynamicStatesDepth: -1,
             },
           }}
         >

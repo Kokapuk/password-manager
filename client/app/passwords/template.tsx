@@ -13,7 +13,7 @@ interface Props {
 const transitionOptions: TransitionOptions = {
   duration: 400,
   forcePresenceTransition: true,
-  captureDynamicStates: true,
+  captureDynamicStatesDepth: -1,
 };
 
 const getPathnameLevel = (pathname: string) => pathname.split('/').filter(Boolean).length;
