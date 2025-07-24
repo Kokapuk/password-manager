@@ -7,6 +7,7 @@ import NextTopLoader from 'nextjs-toploader';
 import 'react-smooth-flow/style.min.css';
 
 const AppProtocolCaller = dynamic(() => import('@/utils/AppProtocolCaller'));
+const TransparentBackgroundHandler = dynamic(() => import('@/utils/TransparentBackgroundHandler'));
 const Toasts = dynamic(() => import('@/components/Toasts'));
 const CloseUnsavedChangesModal = dynamic(() => import('@/components/CloseUnsavedChangesModal'));
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <NextTopLoader color="#175ddc" height={3} showSpinner={false} />
         <AppProtocolCaller />
+        <TransparentBackgroundHandler />
         <TitleBarWrapper />
         <div id="root">
           {children}
